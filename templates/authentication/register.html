@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid" style="position: fixed; top: 75px; bottom: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: center; padding: 20px; overflow: hidden; box-sizing: border-box;">
+    <div class="w-100 mx-auto" style="max-width: 940px;">
+        
+        <div class="premium-card bg-white p-4 shadow-lg border border-light-subtle" style="border-top: 5px solid var(--primary-maroon) !important; border-bottom: 5px solid var(--primary-maroon) !important; border-radius: 20px;">
+            
+            <div class="text-center mb-3">
+                <div class="d-inline-flex p-2 rounded-circle bg-light mb-1" style="color: var(--primary-maroon); width: 44px; height: 44px; align-items: center; justify-content: center;">
+                    <i class="fa-solid fa-user-plus fs-5"></i>
+                </div>
+                <h3 class="fw-extrabold text-dark tracking-tight mb-0" style="font-family: var(--font-display); font-size: 1.65rem;">Create Research Account</h3>
+                <p class="text-muted small mb-0">Register your credentials to join the secure academic repository ecosystem.</p>
+            </div>
+
+            <form method="post" autocomplete="off" class="m-0">
+                {% csrf_token %}
+                
+                <div class="row g-3 mb-3">
+                    {% for field in form %}
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-uppercase tracking-wider text-muted mb-1" style="font-size: 0.75rem; display: block;">
+                                {{ field.label }}
+                            </label>
+
+                            {% if field.name == 'role' or 'role' in field.label|lower %}
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 border-light-subtle text-muted px-3"><i class="fa-solid fa-users-gear"></i></span>
+                                    <select name="{{ field.name }}" id="id_{{ field.name }}" class="form-select border-start-0 border-light-subtle bg-light bg-opacity-25" style="border-radius: 0 10px 10px 0; font-size: 0.95rem; height: 44px;" required>
+                                        <option value="" disabled selected hidden>Select deployment track...</option>
+                                        <option value="researcher">Principal Investigator / Researcher</option>
+                                        <option value="peer_reviewer">Academic Peer Reviewer</option>
+                                        <option value="general_public">General Observer</option>
+                                    </select>
+                                </div>
+
+                            {% elif "password" in field.name or "Password" in field.label %}
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 border-light-subtle text-muted px-3"><i class="fa-solid fa-lock"></i></span>
+                                    <input type="password" name="{{ field.name }}" id="reg_field_{{ forloop.counter }}" class="form-control border-x-0 border-light-subtle bg-light bg-opacity-25" style="font-size: 0.95rem; height: 44px;" placeholder="Security passphrase" required>
+                                    <button type="button" class="input-group-text bg-light border-start-0 border-light-subtle text-muted px-3 registration-eye-toggle" data-target="reg_field_{{ forloop.counter }}" style="border-radius: 0 10px 10px 0; cursor: pointer;">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </div>
+
+                            {% else %}
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 border-light-subtle text-muted px-3">
+                                        {% if "email" in field.name %}<i class="fa-regular fa-envelope"></i>
+                                        {% elif "user" in field.name %}<i class="fa-regular fa-user"></i>
+                                        {% else %}<i class="fa-solid fa-pen-to-square"></i>{% endif %}
+                                    </span>
+                                    <input type="{{ field.field.widget.input_type|default:'text' }}" name="{{ field.name }}" class="form-control border-start-0 border-light-subtle bg-light bg-opacity-25" style="border-radius: 0 10px 10px 0; font-size: 0.95rem; height: 44px;" placeholder="{{ field.label }}" value="{{ field.value|default:'' }}" required>
+                                </div>
+                            {% endif %}
+
+                            {% for error in field.errors %}
+                                <div class="text-danger small fw-semibold mt-0.5 px-1" style="font-size: 0.7rem;"><i class="fa-solid fa-circle-exclamation me-1"></i> {{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5 mx-auto">
+                        <button type="submit" class="btn text-white w-100 py-2 text-uppercase tracking-wider fs-6 shadow-sm" style="background-color: var(--primary-maroon); height: 46px; border-radius: 10px; border: none; font-weight: 700;">
+                            Register Account Vault
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="text-center pt-3 mt-3 border-top border-light">
+                <p class="text-muted mb-0 small">
+                    Already registered within the system? 
+                    <a href="{% url 'login' %}" class="fw-bold text-decoration-none ms-1" style="color: var(--primary-maroon);">Return to Login</a>
+                </p>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButtons = document.querySelectorAll('.registration-eye-toggle');
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetInput = document.getElementById(targetId);
+                const icon = this.querySelector('i');
+                
+                if (targetInput.type === 'password') {
+                    targetInput.type = 'text';
+                    icon.className = 'fa-regular fa-eye-slash';
+                } else {
+                    targetInput.type = 'password';
+                    icon.className = 'fa-regular fa-eye';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

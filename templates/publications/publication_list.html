@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .premium-gradient-banner {
+        background: linear-gradient(135deg, var(--primary-maroon), #2e050d);
+        border-radius: 20px;
+        border-bottom: 4px solid var(--premium-gold);
+    }
+    .wonderful-card {
+        border-radius: 18px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .custom-filter-input {
+        height: 44px;
+        font-size: 0.95rem;
+        border-radius: 10px !important;
+        background-color: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        padding-left: 15px;
+    }
+    .custom-filter-input:focus {
+        border-color: var(--primary-maroon);
+        box-shadow: 0 0 0 0.25rem rgba(84, 11, 24, 0.1);
+    }
+    .premium-table th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        color: #6c757d;
+        border-bottom: 2px solid #f8f9fa;
+        padding: 16px 20px !important;
+    }
+    .premium-table td {
+        padding: 18px 20px !important;
+        font-size: 0.95rem;
+    }
+    .badge-submitted { background-color: rgba(108, 117, 125, 0.1); color: #6c757d; border: 1px solid rgba(108, 117, 125, 0.2); }
+    .badge-review { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; border: 1px solid rgba(13, 110, 253, 0.2); }
+    .badge-approved { background-color: rgba(25, 135, 84, 0.1); color: #198754; border: 1px solid rgba(25, 135, 84, 0.2); }
+    .badge-rejected { background-color: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.2); }
+    .badge-revision { background-color: rgba(255, 193, 7, 0.15); color: #b58100; border: 1px solid rgba(255, 193, 7, 0.3); }
+</style>
+
+<div class="container-fluid px-md-4" style="padding-top: 95px; min-height: calc(100vh - 80px);">
+    <div class="row">
+        
+        {% if user.is_authenticated %}
+            {% include 'includes/sidebar.html' %}
+        {% endif %}
+
+        <main class="{% if user.is_authenticated %}col-md-9 ms-sm-auto col-lg-10{% else %}col-12{% endif %} px-md-4 pb-5">
+            
+            <div class="premium-gradient-banner p-4 p-md-5 text-white mb-4 shadow-sm position-relative overflow-hidden">
+                <div class="position-relative z-1 d-flex flex-column flex-md-row justify-content-between align-items-md-center g-3">
+                    <div>
+                        <span class="badge bg-warning text-dark mb-2 px-3 py-1.5 fw-bold text-uppercase" style="background-color: var(--premium-gold) !important; font-size: 0.75rem;">Asset Catalogs</span>
+                        <h1 class="display-6 fw-extrabold mb-2" style="font-family: var(--font-display);">Master Repository Records</h1>
+                        <p class="lead text-white text-opacity-75 mb-0" style="font-size: 1rem;">Explore verified academic publications metrics, system downloads registries, and peer states.</p>
+                    </div>
+                </div>
+                <div class="position-absolute end-0 bottom-0 opacity-10 text-white mb-n5 me-n3 d-none d-md-block">
+                    <i class="fa-solid fa-folder-open" style="font-size: 14rem;"></i>
+                </div>
+            </div>
+
+            <!-- Upload Button (Maroon) placed above the Filter Form -->
+            <div class="mb-4">
+                <a href="{% url 'publication_create' %}" class="btn text-white fw-bold px-4 py-2.5 shadow-sm" style="background-color: var(--primary-maroon); border-radius: 12px; font-size: 0.9rem;">
+                    <i class="fa-solid fa-upload me-2"></i> Upload Publication
+                </a>
+            </div>
+
+            <div class="card p-4 wonderful-card shadow-sm mb-4 border-start border-4" style="border-left-color: var(--premium-gold) !important; background: #fdfdfd;">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label small fw-bold text-uppercase tracking-wider text-muted mb-1.5" style="font-size: 0.725rem;">Title Signature Vector</label>
+                        {% if filter.form.title %}
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-muted px-3" style="border-radius: 10px 0 0 10px; border: 1px solid rgba(0, 0, 0, 0.1);"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                <input type="text" name="title" class="form-control custom-filter-input border-start-0" value="{{ request.GET.title }}" placeholder="Filter by title parameters..." style="border-radius: 0 10px 10px 0 !important;">
+                            </div>
+                        {% else %}
+                            <input type="text" name="title" class="form-control custom-filter-input" value="{{ request.GET.title }}" placeholder="Search by publication name...">
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold text-uppercase tracking-wider text-muted mb-1.5" style="font-size: 0.725rem;">Journal Outlet Identifier</label>
+                        {% if filter.form.journal_name %}
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 text-muted px-3" style="border-radius: 10px 0 0 10px; border: 1px solid rgba(0, 0, 0, 0.1);"><i class="fa-solid fa-book-open"></i></span>
+                                <input type="text" name="journal_name" class="form-control custom-filter-input border-start-0" value="{{ request.GET.journal_name }}" placeholder="Filter by journal code..." style="border-radius: 0 10px 10px 0 !important;">
+                            </div>
+                        {% else %}
+                            <input type="text" name="journal_name" class="form-control custom-filter-input" value="{{ request.GET.journal_name }}" placeholder="Search by journal outlet...">
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3">
+                        <button type="submit" class="btn text-white w-100 py-2 text-uppercase tracking-wider shadow-sm fw-bold" style="background-color: var(--primary-maroon); height: 44px; border-radius: 10px; border: none; font-size: 0.85rem;">
+                            <i class="fa-solid fa-filter me-1.5"></i> Run Query Vectors
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card wonderful-card shadow-sm border-0 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table premium-table table-hover align-middle mb-0">
+                        <thead class="bg-light bg-opacity-50">
+                            <tr>
+                                <th style="width: 40%;">Title Signature Object</th>
+                                <th style="width: 20%;">Journal Outlet</th>
+                                <th style="width: 15%;">Timestamp</th>
+                                <th style="width: 13%;">Lifecycle Mode</th>
+                                <th style="width: 12%;">Metrics</th>
+                                <th class="text-end" style="width: 10%;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pub in publications %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="p-2 rounded bg-danger bg-opacity-10 text-danger me-3 d-none d-sm-flex" style="color: var(--primary-maroon) !important;">
+                                            <i class="fa-solid fa-file-pdf fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <span class="text-dark fw-bold d-block" style="letter-spacing: -0.01em; line-height: 1.35;">{{ pub.title }}</span>
+                                            <small class="text-muted text-uppercase fw-semibold" style="font-size: 0.7rem;">DOI: {{ pub.doi|default:"No DOI Assigned" }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-secondary fw-medium">{{ pub.journal_name }}</span>
+                                </td>
+                                <td>
+                                    <span class="text-muted small"><i class="fa-regular fa-calendar me-1.5 opacity-75"></i>{{ pub.publication_date|date:"M d, Y" }}</span>
+                                </td>
+                                <td>
+                                    {% if pub.status == 'Approved' %}
+                                        <span class="badge px-2.5 py-1.5 rounded-pill badge-approved"><i class="fa-solid fa-circle-check me-1"></i>{{ pub.status }}</span>
+                                    {% elif pub.status == 'Under Review' %}
+                                        <span class="badge px-2.5 py-1.5 rounded-pill badge-review"><i class="fa-solid fa-arrows-spin fa-spin me-1"></i>{{ pub.status }}</span>
+                                    {% elif pub.status == 'Revision Required' %}
+                                        <span class="badge px-2.5 py-1.5 rounded-pill badge-revision"><i class="fa-solid fa-pen-to-square me-1"></i>{{ pub.status }}</span>
+                                    {% elif pub.status == 'Rejected' %}
+                                        <span class="badge px-2.5 py-1.5 rounded-pill badge-rejected"><i class="fa-solid fa-circle-xmark me-1"></i>{{ pub.status }}</span>
+                                    {% else %}
+                                        <span class="badge px-2.5 py-1.5 rounded-pill badge-submitted"><i class="fa-solid fa-paper-plane me-1"></i>{{ pub.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="text-dark fw-semibold small">
+                                        <i class="fa-solid fa-cloud-arrow-down me-1.5 text-muted"></i>{{ pub.downloads_count }}
+                                    </div>
+                                </td>
+                                <td class="text-end">
+                                    <a href="{% url 'secure_download_publication' pub.pk %}" class="btn btn-sm btn-dark px-3 py-2 d-inline-flex align-items-center justify-content-center" style="border-radius: 8px; font-weight: 600; font-size: 0.8rem;">
+                                        <i class="fa-solid fa-shield-halved me-1.5"></i> Secure Download
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="fa-solid fa-bezier-curve d-block fs-2 mb-3 text-light-subtle"></i>
+                                    No structural academic files fit query profile matching vectors.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+{% endblock %}

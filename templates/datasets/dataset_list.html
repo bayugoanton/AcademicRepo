@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid px-md-4" style="padding-top: 95px; min-height: 100vh;">
+    <div class="row">
+        {% if user.is_authenticated %}{% include 'includes/sidebar.html' %}{% endif %}
+
+        <main class="{% if user.is_authenticated %}col-md-9 ms-sm-auto col-lg-10{% else %}col-12{% endif %} px-md-4 pb-5">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-extrabold" style="font-family: var(--font-display);">Dataset Registry</h2>
+                    <p class="text-muted small">Independent empirical data nodes and binary archives.</p>
+                </div>
+                <a href="{% url 'dataset_upload' %}" class="btn text-white px-4 py-2" style="background-color: var(--primary-maroon); border-radius: 12px; font-weight: 600;">
+                    <i class="fa-solid fa-plus me-2"></i> Register Dataset
+                </a>
+            </div>
+
+            <!-- Cards -->
+            <div class="row g-4">
+                {% for ds in datasets %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 p-4" style="border-radius: 20px; border: 1px solid rgba(0,0,0,0.05);">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge bg-light text-muted">{{ ds.version }}</span>
+                            <span class="badge bg-dark bg-opacity-75 text-white">{{ ds.status }}</span>
+                        </div>
+                        <h5 class="fw-bold mb-1">{{ ds.title }}</h5>
+                        <p class="text-muted small mb-3">{{ ds.category }} | {{ ds.research_area }}</p>
+                        
+                        <div class="mt-auto d-flex gap-2">
+                            <a href="#" class="btn btn-sm btn-outline-dark flex-grow-1">View</a>
+                            <a href="{{ ds.data_file.url }}" class="btn btn-sm btn-primary flex-grow-1">Download</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5 text-muted">
+                    <i class="fa-solid fa-database display-4 opacity-25 mb-3"></i>
+                    <p>No datasets detected in the registry.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

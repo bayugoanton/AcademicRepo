@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .premium-gradient-banner {
+        background: linear-gradient(135deg, var(--primary-maroon), #2e050d);
+        border-radius: 20px;
+        border-bottom: 4px solid var(--premium-gold);
+    }
+    .wonderful-card {
+        border-radius: 18px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .wonderful-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(84, 11, 24, 0.05) !important;
+    }
+    .icon-shape {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+    }
+</style>
+
+<div class="container-fluid px-md-4" style="padding-top: 95px; min-height: calc(100vh - 80px);">
+    <div class="row">
+        
+        {% if user.is_authenticated %}
+            {% include 'includes/sidebar.html' %}
+        {% endif %}
+
+        <main class="{% if user.is_authenticated %}col-md-9 ms-sm-auto col-lg-10{% else %}col-12{% endif %} px-md-4 pb-5">
+            
+            <div class="premium-gradient-banner p-4 p-md-5 text-white mb-4 shadow-sm position-relative overflow-hidden">
+                <div class="position-relative z-1">
+                    <span class="badge bg-warning text-dark mb-2 px-3 py-1.5 fw-bold text-uppercase" style="background-color: var(--premium-gold) !important; font-size: 0.75rem;">Workspace Verified</span>
+                    <h1 class="display-6 fw-extrabold mb-2" style="font-family: var(--font-display);">Research Operations Environment</h1>
+                    <p class="lead text-white text-opacity-75 mb-0" style="font-size: 1rem;">Welcome back, {{ user.username }} &mdash; managing secure repository repositories and academic assets matrix.</p>
+                </div>
+                <div class="position-absolute end-0 bottom-0 opacity-10 text-white mb-n5 me-n3 d-none d-md-block">
+                    <i class="fa-solid fa-graduation-cap" style="font-size: 14rem;"></i>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="card p-4 wonderful-card shadow-sm border-start border-4" style="border-left-color: var(--primary-maroon) !important;">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-uppercase small fw-bold text-muted tracking-wider">Publications</span>
+                                <h2 class="fw-bold text-dark mt-2 mb-0">{{ publications.count }}</h2>
+                            </div>
+                            <div class="icon-shape bg-danger bg-opacity-10 text-danger" style="color: var(--primary-maroon) !important;">
+                                <i class="fa-solid fa-book-bookmark fs-4"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card p-4 wonderful-card shadow-sm border-start border-4" style="border-left-color: var(--primary-maroon) !important;">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-uppercase small fw-bold text-muted tracking-wider">Linked Datasets</span>
+                                <h2 class="fw-bold text-dark mt-2 mb-0">{{ datasets.count }}</h2>
+                            </div>
+                            <div class="icon-shape bg-danger bg-opacity-10 text-danger" style="color: var(--primary-maroon) !important;">
+                                <i class="fa-solid fa-database fs-4"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card p-4 wonderful-card shadow-sm border-start border-4" style="border-left-color: var(--primary-maroon) !important;">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-uppercase small fw-bold text-muted tracking-wider">Credentials</span>
+                                <h2 class="fw-bold text-dark mt-2 mb-0">0</h2>
+                            </div>
+                            <div class="icon-shape bg-danger bg-opacity-10 text-danger" style="color: var(--primary-maroon) !important;">
+                                <i class="fa-solid fa-key fs-4"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="card p-4 wonderful-card shadow-sm">
+                        <h4 class="fw-bold text-dark mb-3" style="font-size: 1.1rem;">System Logs Broadcast Channel</h4>
+                        <ul class="list-group list-group-flush small">
+                            {% for n in notifications %}
+                                <li class="list-group-item px-0 py-3 bg-transparent d-flex align-items-start border-bottom border-light">
+                                    <span class="p-1.5 rounded bg-light text-muted me-3 mt-0.5"><i class="fa-regular fa-bell fs-6"></i></span>
+                                    <div class="flex-grow-1">
+                                        <div class="text-dark fw-medium">{{ n.message }}</div>
+                                        <small class="text-muted d-block mt-1">Broadcast message stream payload</small>
+                                    </div>
+                                </li>
+                            {% empty %}
+                                <li class="list-group-item px-0 py-5 text-muted bg-transparent text-center border-0">
+                                    <i class="fa-solid fa-bell-slash d-block fs-2 mb-3 text-light-subtle"></i>
+                                    No operational updates broadcasting over active networks.
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+{% endblock %}

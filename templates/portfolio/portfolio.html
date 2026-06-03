@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid px-md-4" style="padding-top: 95px; min-height: 100vh;">
+    <div class="row">
+        {% if user.is_authenticated %}{% include 'includes/sidebar.html' %}{% endif %}
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pb-5">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <div>
+                    <h2 class="fw-extrabold" style="font-family: var(--font-display);">Academic Portfolio</h2>
+                    <span class="badge bg-success">Visible: {{ portfolio.is_public|yesno:"Public,Private" }}</span>
+                </div>
+                <div class="btn-group shadow-sm">
+                    <a href="{% url 'edit_portfolio' %}" class="btn btn-outline-dark px-3">
+                        <i class="fa-solid fa-pen-to-square me-2"></i>Edit
+                    </a>
+                    <a href="{% url 'generate_pdf' %}" class="btn text-white px-3" style="background-color: var(--primary-maroon);">
+                        <i class="fa-solid fa-file-pdf me-2"></i>Generate PDF
+                    </a>
+                </div>
+            </div>
+
+            <div class="card wonderful-card p-4 mb-4">
+                <div class="row">
+                    <div class="col-md-2 text-center">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary mb-3 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">No Image</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-10">
+                        <h4 class="fw-bold">{{ user.get_full_name|default:user.username }}</h4>
+                        <p class="text-muted">{{ user.profile.department|default:"Department not set" }} | {{ user.profile.get_role_display }}</p>
+                        <p>{{ user.profile.bio|default:"No biography provided." }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card wonderful-card p-4 mb-4">
+                        <h5>Research Interests</h5>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            {% if portfolio.research_interests %}
+                                {% for interest in portfolio.research_interests.split %}
+                                    <span class="badge bg-light text-dark border">{{ interest }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted">No research interests listed.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card wonderful-card p-4 bg-light border-0">
+                        <h5>Statistics</h5>
+                        <div class="mt-3">
+                            <p>Total Publications: <strong>{{ user.publications.count }}</strong></p>
+                            <p>Datasets Shared: <strong>{{ user.datasets.count }}</strong></p>
+                            <p>Credentials Verified: <strong>{{ user.credentials.count }}</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

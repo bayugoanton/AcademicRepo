@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Centered container configured to clear the fixed navbar without forcing vertical scrolling -->
+<div class="container d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 70px); padding-top: 90px; padding-bottom: 30px; box-sizing: border-box;">
+    <div class="w-100 mx-auto" style="max-width: 500px;">
+        
+        <!-- Premium Wide Card with Optimized Vertical Padding -->
+        <div class="premium-card bg-white p-4 shadow-lg border border-light-subtle" style="border-top: 5px solid var(--primary-maroon) !important; border-bottom: 5px solid var(--primary-maroon) !important; border-radius: 20px;">
+            
+            <div class="text-center mb-4">
+                <div class="d-inline-flex p-2.5 rounded-circle bg-light mb-2" style="color: var(--primary-maroon);">
+                    <i class="fa-solid fa-shield-halved fs-4"></i>
+                </div>
+                <h3 class="fw-extrabold text-dark tracking-tight mb-1" style="font-family: var(--font-display); font-size: 1.65rem;">Access Terminal</h3>
+                <p class="text-muted small mb-0">Provide authorized credentials to initialize your secure session.</p>
+            </div>
+
+            <form method="post" autocomplete="off" class="mb-3">
+                {% csrf_token %}
+                
+                <!-- Expanded Username Input Group -->
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-uppercase tracking-wider text-muted mb-1.5" style="font-size: 0.75rem;">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 border-light-subtle text-muted px-3"><i class="fa-regular fa-user"></i></span>
+                        <input type="text" name="username" class="form-control border-start-0 border-light-subtle bg-light bg-opacity-25" style="border-radius: 0 10px 10px 0; font-size: 0.95rem; height: 46px;" placeholder="Username" required>
+                    </div>
+                </div>
+
+                <!-- Expanded Password Input Group -->
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-uppercase tracking-wider text-muted mb-1.5" style="font-size: 0.75rem;">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 border-light-subtle text-muted px-3"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" name="password" id="loginPasswordField" class="form-control border-x-0 border-light-subtle bg-light bg-opacity-25" style="font-size: 0.95rem; height: 46px;" placeholder="Password" required>
+                        <button type="button" id="loginPasswordToggle" class="input-group-text bg-light border-start-0 border-light-subtle text-muted px-3" style="border-radius: 0 10px 10px 0; cursor: pointer;">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="btn text-white w-100 py-2 text-uppercase tracking-wider fs-6 shadow-sm" style="background-color: var(--primary-maroon); border: none; border-radius: 10px; font-weight: 700; height: 46px;">
+                        Login
+                    </button>
+                </div>
+            </form>
+
+            <!-- Context Link Footer -->
+            <div class="text-center pt-3 border-top border-light">
+                <p class="text-muted mb-0 small">
+                    Don't have an account? 
+                    <a href="{% url 'register' %}" class="fw-bold text-decoration-none ms-1" style="color: var(--primary-maroon);">Register Here</a>
+                </p>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordField = document.getElementById('loginPasswordField');
+        const toggleButton = document.getElementById('loginPasswordToggle');
+        const toggleIcon = toggleButton.querySelector('i');
+
+        toggleButton.addEventListener('click', function() {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.className = 'fa-regular fa-eye-slash';
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.className = 'fa-regular fa-eye';
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    /* Status-based border coloring for the audit trail */
+    .border-left-accepted { border-left: 5px solid #198754 !important; } /* Success Green */
+    .border-left-rejected { border-left: 5px solid #dc3545 !important; } /* Danger Red */
+    .border-left-revision { border-left: 5px solid #ffc107 !important; } /* Warning Yellow */
+    .border-left-pending { border-left: 5px solid #6c757d !important; }  /* Secondary Gray */
+</style>
+
+<div class="container-fluid px-md-4" style="padding-top: 95px; min-height: 100vh;">
+    <div class="row">
+        {% if user.is_authenticated %}{% include 'includes/sidebar.html' %}{% endif %}
+
+        <main class="{% if user.is_authenticated %}col-md-9 ms-sm-auto col-lg-10{% else %}col-12{% endif %} px-md-4 pb-5">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="fw-extrabold" style="font-family: var(--font-display);">Review Actions Matrix</h3>
+                    <p class="text-muted small">Tracking history and peer-evaluation commentary payloads.</p>
+                </div>
+            </div>
+
+            <div class="row">
+                {% for r in review_list %}
+                <div class="col-12 mb-3">
+                    <!-- Dynamic class applied here to avoid CSS validation errors -->
+                    <div class="card p-4 shadow-sm border-left-{{ r.decision|slugify }}" style="border-radius: 15px;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <span class="badge bg-light text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.1em;">Evaluation Target</span>
+                                <h5 class="fw-bold mt-1">{{ r.publication.title }}</h5>
+                            </div>
+                            <span class="badge bg-dark px-3 py-2 text-uppercase" style="font-size: 0.75rem;">{{ r.decision }}</span>
+                        </div>
+                        
+                        <div class="mt-3 bg-light p-3 rounded" style="border: 1px solid rgba(0,0,0,0.03);">
+                            <p class="small text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.7rem;">Reviewer Commentary:</p>
+                            <p class="mb-0 text-dark">{{ r.comments }}</p>
+                        </div>
+                        
+                        <div class="mt-3 text-muted small">
+                            <i class="fa-solid fa-user-shield me-1"></i> Reviewed by {{ r.reviewer.username }} 
+                            <span class="mx-2">•</span> 
+                            <i class="fa-regular fa-calendar me-1"></i> {{ r.review_date|date:"M d, Y" }}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <i class="fa-solid fa-list-check display-4 opacity-25 mb-3"></i>
+                    <p class="text-muted">No validation task reviews recorded in the framework.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

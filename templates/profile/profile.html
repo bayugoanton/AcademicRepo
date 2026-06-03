@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .premium-gradient-banner {
+        background: linear-gradient(135deg, var(--primary-maroon), #2e050d);
+        border-radius: 20px;
+        border-bottom: 4px solid var(--premium-gold);
+    }
+    .wonderful-card {
+        border-radius: 18px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .profile-avatar-wrapper {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 4px solid #ffffff;
+        box-shadow: 0 8px 20px rgba(84, 11, 24, 0.15);
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    .profile-avatar-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .custom-file-upload {
+        border: 1px dashed var(--primary-maroon);
+        display: inline-block;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 10px;
+        background-color: rgba(84, 11, 24, 0.02);
+        color: var(--primary-maroon);
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+    }
+    .custom-file-upload:hover {
+        background-color: var(--primary-maroon);
+        color: #ffffff;
+    }
+</style>
+
+<div class="container-fluid px-md-4" style="padding-top: 95px; min-height: calc(100vh - 80px);">
+    <div class="row">
+        
+        {% if user.is_authenticated %}
+            {% include 'includes/sidebar.html' %}
+        {% endif %}
+
+        <main class="{% if user.is_authenticated %}col-md-9 ms-sm-auto col-lg-10{% else %}col-12{% endif %} px-md-4 pb-5">
+            
+            {% if messages %}
+                <div class="row mb-3">
+                    <div class="col-12">
+                        {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags|default:'success' }}{% endif %} alert-dismissible fade show shadow-sm border-0" role="alert" style="border-radius: 12px;">
+                                <div class="d-flex align-items-center small fw-semibold">
+                                    {% if message.tags == 'error' %}
+                                        <i class="fa-solid fa-circle-exclamation me-2 fs-5"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-circle-check me-2 fs-5 text-success"></i>
+                                    {% endif %}
+                                    {{ message }}
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            <div class="premium-gradient-banner p-4 p-md-5 text-white mb-4 shadow-sm position-relative overflow-hidden">
+                <div class="position-relative z-1">
+                    <span class="badge bg-warning text-dark mb-2 px-3 py-1.5 fw-bold text-uppercase" style="background-color: var(--premium-gold) !important; font-size: 0.75rem;">Account Matrix</span>
+                    <h1 class="display-6 fw-extrabold mb-2" style="font-family: var(--font-display);">Personal Profile Vault</h1>
+                    <p class="lead text-white text-opacity-75 mb-0" style="font-size: 1rem;">Manage your active identity credentials, institutional track preferences, and secure cryptographic assets.</p>
+                </div>
+                <div class="position-absolute end-0 bottom-0 opacity-10 text-white mb-n5 me-n3 d-none d-md-block">
+                    <i class="fa-solid fa-address-card" style="font-size: 14rem;"></i>
+                </div>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" autocomplete="off" class="m-0">
+                {% csrf_token %}
+                
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="card p-4 wonderful-card shadow-sm text-center border-top border-4" style="border-top-color: var(--primary-maroon) !important;">
+                            <div class="d-flex flex-column align-items-center">
+                                
+                                <div class="profile-avatar-wrapper mb-3">
+                                    {% if user.profile.avatar %}
+                                        <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }} Avatar" id="avatarImagePreview">
+                                    {% else %}
+                                        <i class="fa-solid fa-user-astronaut text-muted" style="font-size: 3.5rem;" id="avatarPlaceholderIcon"></i>
+                                        <img src="" alt="Preview" id="avatarImagePreview" style="display: none;">
+                                    {% endif %}
+                                </div>
+                                
+                                <h5 class="fw-bold text-dark mb-1">{{ user.username }}</h5>
+                                <span class="badge bg-light text-muted border border-light-subtle px-2.5 py-1 mb-4 text-lowercase" style="font-size: 0.8rem;">
+                                    {{ user.email|default:"no-email@identity.secure" }}
+                                </span>
+
+                                <div class="w-100 border-top border-light pt-3">
+                                    <label for="id_avatar_input" class="custom-file-upload shadow-sm w-100 text-center mb-2">
+                                        <i class="fa-solid fa-cloud-arrow-up me-2"></i>Choose Profile Picture
+                                    </label>
+                                    <input type="file" name="avatar" id="id_avatar_input" accept="image/*" style="display: none;">
+                                    <small class="text-muted d-block filespec-text" style="font-size: 0.75rem;">Supports PNG, JPG, or WEBP (Max 2MB)</small>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="card p-4 wonderful-card shadow-sm border-start border-4" style="border-left-color: var(--primary-maroon) !important;">
+                            <h4 class="fw-bold text-dark mb-4" style="font-size: 1.15rem; letter-spacing: -0.025em;">Identity Registration Metadata</h4>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-uppercase tracking-wider text-muted mb-1.5" style="font-size: 0.725rem;">System Handle / Username</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0 border-light-subtle text-muted px-3"><i class="fa-regular fa-user"></i></span>
+                                        <input type="text" name="username" class="form-control border-start-0 border-light-subtle bg-light bg-opacity-25" value="{{ user.username }}" placeholder="Update username handle" required style="height: 44px; font-size: 0.95rem; border-radius: 0 10px 10px 0;">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-uppercase tracking-wider text-muted mb-1.5" style="font-size: 0.725rem;">Communication Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0 border-light-subtle text-muted px-3"><i class="fa-regular fa-envelope"></i></span>
+                                        <input type="email" name="email" class="form-control border-start-0 border-light-subtle bg-light bg-opacity-25" value="{{ user.email }}" placeholder="Enter network email" required style="height: 44px; font-size: 0.95rem; border-radius: 0 10px 10px 0;">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-uppercase tracking-wider text-muted mb-1.5" style="font-size: 0.725rem;">Given Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0 border-light-subtle text-muted px-3"><i class="fa-solid fa-signature"></i></span>
+                                        <input type="text" name="first_name" class="form-control border-start-0 border-light-subtle bg-light bg-opacity-25" value="{{ user.first_name }}" placeholder="First Name" style="height: 44px; font-size: 0.95rem; border-radius: 0 10px 10px 0;">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-uppercase tracking-wider text-muted mb-1.5" style="font-size: 0.725rem;">Surname</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0 border-light-subtle text-muted px-3"><i class="fa-solid fa-signature"></i></span>
+                                        <input type="text" name="last_name" class="form-control border-start-0 border-light-subtle bg-light bg-opacity-25" value="{{ user.last_name }}" placeholder="Last Name" style="height: 44px; font-size: 0.95rem; border-radius: 0 10px 10px 0;">
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-uppercase tracking-wider text-muted mb-1.5" style="font-size: 0.725rem;">Assigned Operational Deployment Track</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0 border-light-subtle text-muted px-3"><i class="fa-solid fa-users-gear"></i></span>
+                                        <select name="role" id="id_profile_role" class="form-select border-start-0 border-light-subtle bg-light bg-opacity-25" style="border-radius: 0 10px 10px 0; font-size: 0.95rem; height: 44px;" required>
+                                            <option value="researcher" {% if user.profile.role == 'researcher' %}selected{% endif %}>Principal Investigator / Researcher</option>
+                                            <option value="peer_reviewer" {% if user.profile.role == 'peer_reviewer' %}selected{% endif %}>Academic Peer Reviewer</option>
+                                            <option value="general_public" {% if user.profile.role == 'general_public' %}selected{% endif %}>General Observer</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4 pt-3 border-top border-light">
+                                <div class="col-md-5 ms-auto">
+                                    <button type="submit" class="btn text-white w-100 py-2 text-uppercase tracking-wider fs-6 shadow-sm" style="background-color: var(--primary-maroon); height: 46px; border-radius: 10px; border: none; font-weight: 700;">
+                                        Commit Profiles Matrix
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </main>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('id_avatar_input');
+        const imgPreview = document.getElementById('avatarImagePreview');
+        const placeholderIcon = document.getElementById('avatarPlaceholderIcon');
+        const textSpecification = document.querySelector('.filespec-text');
+
+        // Instant client-side preview confirmation loop before committing values to server
+        fileInput.addEventListener('change', function() {
+            const chosenFile = this.files[0];
+            if (chosenFile) {
+                const reader = new FileReader();
+                reader.addEventListener('load', function() {
+                    if (placeholderIcon) {
+                        placeholderIcon.style.display = 'none';
+                    }
+                    imgPreview.setAttribute('src', this.result);
+                    imgPreview.style.display = 'block';
+                });
+                reader.readAsDataURL(chosenFile);
+                textSpecification.textContent = chosenFile.name + " (" + (chosenFile.size/1024/1024).toFixed(2) + " MB)";
+                textSpecification.className = "text-success d-block fw-semibold mt-1";
+            }
+        });
+    });
+</script>
+{% endblock %}

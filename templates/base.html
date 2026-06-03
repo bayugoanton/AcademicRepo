@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResearchVault | Premium Academic Asset Environment</title>
+    
+    <!-- Premium Google Fonts Stack -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-maroon: #540b18;
+            --accent-maroon: #7b1829;
+            --premium-gold: #e0a96d;
+            --dark-surface: #121316;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --font-display: 'Plus Jakarta Sans', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            background-color: #fafafb;
+            color: #2d3139;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, .display-large {
+            font-family: var(--font-display);
+            letter-spacing: -0.03em;
+        }
+
+        .scroll-margin {
+            scroll-margin-top: 6.5rem;
+        }
+
+        .premium-card {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 18px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .premium-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(84, 11, 24, 0.06) !important;
+            border-color: rgba(84, 11, 24, 0.12);
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, var(--primary-maroon), var(--accent-maroon));
+            color: #fff !important;
+            font-family: var(--font-display);
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(84, 11, 24, 0.2);
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(84, 11, 24, 0.35);
+            opacity: 0.95;
+        }
+    </style>
+</head>
+<body>
+    {% include 'includes/navbar.html' %}
+    
+    <!-- Changed to content to unify public and private blocks -->
+    {% block content %}{% endblock %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

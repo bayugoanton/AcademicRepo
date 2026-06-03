@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid px-md-4" style="padding-top: 95px; min-height: 100vh;">
+    <div class="row">
+        <!-- Sidebar Inclusion -->
+        {% if user.is_authenticated %}{% include 'includes/sidebar.html' %}{% endif %}
+
+        <main class="{% if user.is_authenticated %}col-md-9 ms-sm-auto col-lg-10{% else %}col-12{% endif %} px-md-4 pb-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card p-4 p-md-5 shadow-sm" style="border-radius: 20px; border: 1px solid rgba(0,0,0,0.05);">
+                        <div class="text-center mb-4">
+                            <h4 class="fw-extrabold" style="font-family: var(--font-display);">Initialize Peer Evaluation</h4>
+                            <p class="text-muted">Submit your expert analysis for the selected research asset.</p>
+                        </div>
+
+                        <form method="post" class="row g-4">
+                            {% csrf_token %}
+                            {% for field in form %}
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-uppercase text-muted">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="form-text text-muted">{{ field.help_text }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+
+                            <div class="col-12 mt-4 pt-3 border-top">
+                                <button type="submit" class="btn text-white w-100 py-3 text-uppercase fw-bold shadow-sm" style="background-color: var(--primary-maroon); border-radius: 12px; letter-spacing: 0.05em;">
+                                    <i class="fa-solid fa-paper-plane me-2"></i> Submit Evaluation Payload
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

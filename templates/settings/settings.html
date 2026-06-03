@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .settings-card { border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); }
+    .nav-pills .nav-link { 
+        border-radius: 12px; font-weight: 600; color: #6c757d; padding: 12px 20px; 
+    }
+    .nav-pills .nav-link.active { 
+        background-color: var(--primary-maroon) !important; color: white !important; 
+    }
+    .switch-lg { transform: scale(1.2); }
+</style>
+
+<div class="container-fluid px-md-4" style="padding-top: 95px; min-height: 100vh;">
+    <div class="row">
+        {% if user.is_authenticated %}{% include 'includes/sidebar.html' %}{% endif %}
+
+        <main class="{% if user.is_authenticated %}col-md-9 ms-sm-auto col-lg-10{% else %}col-12{% endif %} px-md-4 pb-5">
+            <div class="d-flex align-items-center mb-4">
+                <i class="fa-solid fa-sliders text-muted fs-3 me-3"></i>
+                <h3 class="fw-extrabold mb-0">System Control Center</h3>
+            </div>
+
+            <div class="row">
+                <!-- Tab Menu -->
+                <div class="col-lg-3 mb-4">
+                    <div class="nav flex-column nav-pills gap-2" id="v-pills-tab" role="tablist">
+                        <button class="nav-link active text-start" data-bs-toggle="pill" data-bs-target="#security">
+                            <i class="fa-solid fa-shield-halved me-2"></i> Security
+                        </button>
+                        <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#notifications">
+                            <i class="fa-solid fa-bell me-2"></i> Notifications
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Content Area -->
+                <div class="col-lg-9">
+                    <div class="tab-content">
+                        <!-- Security Tab -->
+                        <div class="tab-pane fade show active" id="security">
+                            <div class="settings-card p-4 bg-white shadow-sm mb-4">
+                                <h5 class="fw-bold mb-3">Authentication</h5>
+                                <button class="btn btn-dark w-100 py-2 mb-2">Update Password</button>
+                                <button class="btn btn-outline-secondary w-100 py-2">Logout All Active Sessions</button>
+                            </div>
+                            
+                            <div class="settings-card p-4 bg-white shadow-sm border border-danger">
+                                <h5 class="fw-bold text-danger mb-3">Danger Zone</h5>
+                                <p class="text-muted small">Once deactivated, all research assets and registry logs will be hidden.</p>
+                                <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#deactivateModal">
+                                    Deactivate Account
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Notifications Tab -->
+                        <div class="tab-pane fade" id="notifications">
+                            <div class="settings-card p-4 bg-white shadow-sm">
+                                <h5 class="fw-bold mb-4">System Alerts</h5>
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div><p class="mb-0 fw-bold">Email Notifications</p><small class="text-muted">Receive critical security updates via email.</small></div>
+                                    <div class="form-check form-switch switch-lg"><input class="form-check-input" type="checkbox" checked></div>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div><p class="mb-0 fw-bold">Review Updates</p><small class="text-muted">Alerts when a peer reviews your submission.</small></div>
+                                    <div class="form-check form-switch switch-lg"><input class="form-check-input" type="checkbox" checked></div>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div><p class="mb-0 fw-bold">Dataset Citations</p><small class="text-muted">Notifications when your data is cited.</small></div>
+                                    <div class="form-check form-switch switch-lg"><input class="form-check-input" type="checkbox"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Deactivation Modal -->
+<div class="modal fade" id="deactivateModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-danger text-white border-0"><h5 class="modal-title">Confirm Deactivation</h5></div>
+            <div class="modal-body p-4">Are you absolutely certain? This will terminate your access to ResearchVault.</div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" action="{% url 'deactivate' %}">{% csrf_token %}<button type="submit" class="btn btn-danger">Confirm</button></form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

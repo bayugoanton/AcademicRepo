@@ -1,0 +1,72 @@
+/* EVSU Academic Design Standard Theme Injection */
+:root {
+    --primary-maroon: #800000;
+    --secondary-maroon: #6D0000;
+    --gold-accent: #D4AF37;
+    --white: #FFFFFF;
+    --light-bg: #F8F9FA;
+    --dark-text: #212529;
+    --glass-shadow: 0 8px 32px 0 rgba(128, 0, 0, 0.08);
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+}
+
+/* Navbar Theme Styling */
+.evsu-navbar {
+    background-color: var(--primary-maroon);
+    border-bottom: 4px solid var(--gold-accent);
+}
+.evsu-navbar .nav-link, .evsu-navbar .navbar-brand {
+    color: var(--white) !important;
+    font-weight: 600;
+}
+.evsu-navbar .nav-link:hover {
+    color: var(--gold-accent) !important;
+}
+
+/* Dashboard Sidebar Styling */
+.evsu-sidebar {
+    background-color: var(--secondary-maroon);
+    min-height: 100vh;
+    border-right: 3px solid var(--gold-accent);
+}
+.evsu-sidebar .nav-link {
+    color: var(--white);
+    opacity: 0.85;
+    padding: 12px 20px;
+    display: block;
+    text-decoration: none;
+}
+.evsu-sidebar .nav-link:hover, .evsu-sidebar .nav-link.active {
+    background-color: var(--primary-maroon);
+    color: var(--gold-accent);
+    opacity: 1;
+}
+
+/* UI Components & Academic Elements Layout Templates */
+.evsu-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    box-shadow: var(--glass-shadow);
+}
+.evsu-btn-primary {
+    background-color: var(--primary-maroon);
+    color: var(--white);
+    border: 1px solid var(--primary-maroon);
+    transition: all 0.3s ease;
+}
+.evsu-btn-primary:hover {
+    background-color: var(--secondary-maroon);
+    border-color: var(--gold-accent);
+    color: var(--gold-accent);
+}
+.evsu-table th {
+    background-color: var(--primary-maroon);
+    color: var(--white);
+}

@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="position-absolute top-0 start-50 translate-middle-x w-100 overflow-hidden" style="height: 750px; background: radial-gradient(circle at 50% -20%, rgba(84, 11, 24, 0.05) 0%, rgba(255,255,255,0) 70%); z-index: -1;"></div>
+
+<style>
+    /* Ensures anchor scroll targets clear the fixed top navigation bar cleanly */
+    .scroll-margin {
+        scroll-margin-top: 110px;
+    }
+</style>
+
+<div class="container" style="padding-top: 4rem;">
+
+    <section id="home" class="py-5 scroll-margin">
+        <div class="text-center max-width-lg mx-auto py-4">
+            <span class="badge bg-white text-dark shadow-sm px-4 py-2 mb-4 border border-light rounded-pill fs-6 fw-medium text-uppercase tracking-wider">
+                <i class="fa-solid fa-shield-halved text-success me-2"></i> Verified Academic Custody Environment
+            </span>
+            
+            <h1 class="fw-extrabold text-dark tracking-tight mb-4 display-3" style="font-family: var(--font-display); line-height: 1.15;">
+                Secure Academic Research <br>& Portfolio <span style="background: linear-gradient(120deg, var(--primary-maroon), var(--accent-maroon)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Repository</span>
+            </h1>
+            
+            <p class="col-lg-8 mx-auto fs-4 text-secondary leading-relaxed fw-light mb-5">
+                An institutional tracking environment for managing verified faculty research dissemination, telemetry validations, and structured datasets.
+            </p>
+            
+            <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-5">
+                <a href="{% url 'register' %}" class="btn btn-lg btn-premium px-5 py-3 d-flex align-items-center justify-content-center" style="background-color: var(--primary-maroon); color: white; border-radius: 10px; font-weight: 600; text-decoration: none;">
+                    Initialize Profile Vault <i class="fa-solid fa-chevron-right ms-3 fs-7 opacity-75"></i>
+                </a>
+                <a href="#about" class="btn btn-lg btn-light bg-white border px-4 py-3 text-secondary fw-semibold" style="border-radius: 10px; text-decoration: none;">
+                    Explore Architecture
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4 text-center mt-4">
+            <div class="col-md-4">
+                <div class="p-4 premium-card bg-white shadow-sm h-100 d-flex flex-column justify-content-center" style="border-radius: 15px; border: 1px solid rgba(0,0,0,0.05);">
+                    <div class="small text-uppercase tracking-widest text-muted mb-2 fw-bold">Validated Deliverables</div>
+                    <h2 class="display-5 fw-extrabold mb-0" style="color: var(--primary-maroon);">{{ pub_count|default:"0" }}</h2>
+                    <div class="mt-2 text-success small fw-semibold"><i class="fa-solid fa-square-check me-1"></i> Live Index Stream</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 premium-card bg-white shadow-sm h-100 d-flex flex-column justify-content-center" style="border-radius: 15px; border: 1px solid rgba(0,0,0,0.05);">
+                    <div class="small text-uppercase tracking-widest text-muted mb-2 fw-bold">Structured Datasets</div>
+                    <h2 class="display-5 fw-extrabold mb-0" style="color: var(--primary-maroon);">{{ data_count|default:"0" }}</h2>
+                    <div class="mt-2 text-muted small fw-medium">Cryptographic Hashes Attached</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 premium-card bg-white shadow-sm h-100 d-flex flex-column justify-content-center" style="border-radius: 15px; border: 1px solid rgba(0,0,0,0.05);">
+                    <div class="small text-uppercase tracking-widest text-muted mb-2 fw-bold">Verified Investigators</div>
+                    <h2 class="display-5 fw-extrabold mb-0" style="color: var(--primary-maroon);">{{ user_count|default:"0" }}</h2>
+                    <div class="mt-2 text-primary small fw-semibold"><i class="fa-solid fa-users me-1"></i> Federated Accounts</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 pt-4">
+            <div class="col-12 mb-4 d-flex justify-content-between align-items-end">
+                <div>
+                    <div class="small text-uppercase tracking-wider fw-bold text-muted mb-1">Active Index Feed</div>
+                    <h3 class="fw-extrabold text-dark m-0">Recent Platform Ledger Entries</h3>
+                </div>
+            </div>
+            
+            {% for publication in publications %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 premium-card p-4 bg-white border-start-custom" style="border-left: 5px solid var(--primary-maroon) !important; border-radius: 15px; border-top: 1px solid rgba(0,0,0,0.05); border-right: 1px solid rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05);">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="badge bg-light text-secondary border px-3 py-2 rounded-2 small fw-semibold">Academic Artifact</span>
+                            <small class="text-muted"><i class="fa-regular fa-clock me-1"></i> Just added</small>
+                        </div>
+                        <h4 class="fw-bold text-dark leading-snug mb-3">{{ publication.title }}</h4>
+                        <p class="text-muted mb-4 small">Principal Investigator: <strong>{{ publication.author.username }}</strong></p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top border-light">
+                            <span class="text-success small fw-bold d-flex align-items-center"><i class="fa-solid fa-circle-check me-2"></i>Approved Document</span>
+                            <a href="{% url 'publication_list' %}" class="fw-bold small text-decoration-none" style="color: var(--primary-maroon);">Inspect Metadata <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="text-center py-5 px-4 rounded-4 bg-white border border-dashed shadow-sm" style="border-radius: 20px;">
+                        <div class="mx-auto mb-4 d-flex align-items-center justify-content-center bg-light text-muted rounded-circle" style="width: 80px; height: 80px;">
+                            <i class="fa-solid fa-fingerprint opacity-40 fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2">Central Ledger Base Index Clear</h4>
+                        <p class="text-muted col-md-6 mx-auto fs-5 mb-4">No academic research artifacts are currently published inside the public gateway buffer. Authenticated faculty can broadcast datasets immediately upon logging in.</p>
+                        <a href="{% url 'login' %}" class="btn btn-sm btn-light border px-4 py-2 text-dark fw-medium" style="border-radius: 8px; text-decoration: none;">Access Submission Vault</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="my-5 py-4"><hr class="opacity-10"></div>
+
+    <section id="about" class="py-5 scroll-margin">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="small text-uppercase tracking-wider fw-bold text-muted mb-2">Security Specifications</div>
+                <h2 class="fw-extrabold text-dark mb-4 display-5" style="line-height: 1.2;">Architected for High-Trust Academic Integrity</h2>
+                <p class="fs-5 text-secondary mb-4 font-weight-light">ResearchVault standardizes data discovery layers by decoupling public reference metadata structures away from protected document files.</p>
+                <p class="fs-5 text-secondary">Engineered specifically to map cross-institutional dependency loops, the underlying database environment guarantees verification performance values while enforcing immutable tracking compliance frameworks effortlessly.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-4">
+                    <div class="col-sm-6">
+                        <div class="p-4 premium-card bg-white shadow-sm h-100" style="border-radius: 15px; border: 1px solid rgba(0,0,0,0.05);">
+                            <div class="p-3 bg-danger bg-opacity-10 text-danger rounded-3 d-inline-block mb-3"><i class="fa-solid fa-shield-halved fs-4"></i></div>
+                            <h4 class="fw-bold mb-2 text-dark">Data Boundaries</h4>
+                            <p class="text-muted mb-0 small">Granular row-level permissions isolate pending peer evaluation drafts from public discovery trackers.</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="p-4 premium-card bg-white shadow-sm h-100" style="border-radius: 15px; border: 1px solid rgba(0,0,0,0.05);">
+                            <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-3 d-inline-block mb-3"><i class="fa-solid fa-cubes fs-4"></i></div>
+                            <h4 class="fw-bold mb-2 text-dark">Linked Schemas</h4>
+                            <p class="text-muted mb-0 small">Normalized tables bundle supplementary research files seamlessly adjacent to primary manuscripts.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="my-5 py-4"><hr class="opacity-10"></div>
+
+    <section id="contact" class="py-5 mb-5 bg-white rounded-4 border p-5 shadow-sm scroll-margin" style="border-bottom: 6px solid var(--primary-maroon) !important; border-radius: 20px;">
+        <div class="row g-5">
+            <div class="col-md-5 border-end pe-md-5">
+                <div class="small text-uppercase tracking-wider fw-bold text-muted mb-2">Operations Hub</div>
+                <h2 class="fw-extrabold text-dark mb-4">Institutional Engineering Desk</h2>
+                <p class="text-secondary fs-5 mb-5">Seeking support with asset ingest token profiles, dynamic data set schemas, or multiple author credential mappings? Open an entry terminal thread with our dev operations unit.</p>
+                
+                <div class="mt-4 border-top border-light pt-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="text-muted me-3 fs-5" style="width: 24px;"><i class="fa-solid fa-envelope"></i></span>
+                        <span class="text-dark fw-medium">support@researchvault.edu</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="text-muted me-3 fs-5" style="width: 24px;"><i class="fa-solid fa-phone"></i></span>
+                        <span class="text-dark">Ops Desk: +1 (555) 019-2834</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="text-muted me-3 fs-5" style="width: 24px;"><i class="fa-solid fa-location-dot"></i></span>
+                        <span class="text-secondary small">Systems Development Division, Campus Block B</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-7 ps-md-5">
+                <h4 class="fw-bold text-dark mb-4">Initialize Platform Inquiry</h4>
+                <form onsubmit="event.preventDefault(); alert('Transmission buffer execution completed.');" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold text-uppercase tracking-wider text-muted">Full Legal Name</label>
+                        <input type="text" class="form-control form-control-lg border border-light-subtle bg-light bg-opacity-50" style="border-radius: 10px; font-size: 1rem;" placeholder="Dr. John Doe" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold text-uppercase tracking-wider text-muted">Academic Email</label>
+                        <input type="email" class="form-control form-control-lg border border-light-subtle bg-light bg-opacity-50" style="border-radius: 10px; font-size: 1rem;" placeholder="j.doe@university.edu" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small fw-bold text-uppercase tracking-wider text-muted">Inquiry Subject Scope</label>
+                        <input type="text" class="form-control form-control-lg border border-light-subtle bg-light bg-opacity-50" style="border-radius: 10px; font-size: 1rem;" placeholder="Dataset Metadata Hook Synchronization" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label small fw-bold text-uppercase tracking-wider text-muted">Inquiry Parameters Description</label>
+                        <textarea class="form-control form-control-lg border border-light-subtle bg-light bg-opacity-50" style="border-radius: 10px; font-size: 1rem;" rows="4" placeholder="Detail the technical specifications or administrative registration access constraints encountered..." required></textarea>
+                    </div>
+                    <div class="col-12 pt-3">
+                        <button type="submit" class="btn btn-lg text-white w-100 py-3 text-uppercase tracking-wider fs-6 shadow-sm" style="background-color: var(--primary-maroon); border: none; border-radius: 10px; font-weight: 700;">
+                            Transmit Payload To Core Buffer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

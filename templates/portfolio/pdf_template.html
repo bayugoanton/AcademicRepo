@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        body { 
+            font-family: Arial, Helvetica, sans-serif; 
+            font-size: 12px; 
+            line-height: 1.6;
+            margin: 40px;
+        }
+        .header { 
+            border-bottom: 3px solid #540B18; 
+            margin-bottom: 30px; 
+            padding-bottom: 10px;
+        }
+        .brand { 
+            color: #540B18; 
+            font-size: 24px; 
+            font-weight: bold; 
+            text-transform: uppercase;
+        }
+        .section { margin-bottom: 25px; }
+        .section-title { 
+            background-color: #f2f2f2; 
+            padding: 5px 10px; 
+            border-left: 5px solid #540B18;
+            font-weight: bold;
+            color: #540B18;
+            margin-bottom: 10px;
+        }
+        .footer { 
+            margin-top: 50px; 
+            text-align: center; 
+            font-size: 10px; 
+            color: #888;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="brand">ResearchVault</div>
+        <div>Academic Portfolio: {{ user.get_full_name }}</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Biography</div>
+        <p>{{ user.profile.bio|default:"No biography provided." }}</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Research Interests</div>
+        <p>{{ portfolio.research_interests|default:"Not specified." }}</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Publications</div>
+        <ul>
+            {% for pub in user.publications.all %}
+                <li><strong>{{ pub.title }}</strong> - {{ pub.journal_name }} ({{ pub.year }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="footer">
+        Generated on {% now "F d, Y" %} | Official ResearchVault Document
+    </div>
+</body>
+</html>

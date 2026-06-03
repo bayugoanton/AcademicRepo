@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .wonderful-card {
+        border-radius: 20px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+    }
+    .form-control, .form-select {
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        border: 1px solid #e0e0e0 !important;
+        background-color: #fcfcfc !important;
+    }
+    .form-control:focus {
+        border-color: var(--primary-maroon) !important;
+        box-shadow: 0 0 0 0.2rem rgba(84, 11, 24, 0.1) !important;
+    }
+    /* Ensures fields look balanced next to the sidebar */
+    .form-container { max-width: 900px; margin: 0 auto; }
+</style>
+
+<div class="container-fluid px-md-4" style="padding-top: 95px; min-height: 100vh;">
+    <div class="row">
+        
+        {% if user.is_authenticated %}
+            {% include 'includes/sidebar.html' %}
+        {% endif %}
+
+        <main class="{% if user.is_authenticated %}col-md-9 ms-sm-auto col-lg-10{% else %}col-12{% endif %} px-md-4 pb-5">
+            <div class="form-container">
+                <div class="card p-4 p-md-5 wonderful-card border-top border-4" style="border-top-color: var(--primary-maroon) !important;">
+                    
+                    <div class="mb-4 text-center">
+                        <span class="badge bg-light text-muted border border-light px-3 py-1 mb-2 text-uppercase" style="letter-spacing: 0.1em; font-size: 0.7rem;">Pipeline Intake</span>
+                        <h2 class="fw-extrabold text-dark" style="font-family: var(--font-display);">Register Publication Matrix</h2>
+                        <p class="text-muted">Transmit your scholarly assets for automated peer-review and secure indexing.</p>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" class="needs-validation">
+                        {% csrf_token %}
+                        
+                        <div class="row g-4">
+                            {% for field in form %}
+                            <div class="col-12 {% if field.name == 'title' or field.name == 'journal_name' %}col-md-6{% endif %}">
+                                <label class="form-label small fw-bold text-uppercase text-muted mb-2" style="font-size: 0.725rem;">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="form-text text-muted" style="font-size: 0.75rem;">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mt-5 pt-3 border-top border-light">
+                            <button type="submit" class="btn text-white w-100 py-3 text-uppercase fw-bold shadow-sm" style="background-color: var(--primary-maroon); border-radius: 12px; letter-spacing: 0.05em;">
+                                <i class="fa-solid fa-cloud-arrow-up me-2"></i> Transmit Document Package For System Intake
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
